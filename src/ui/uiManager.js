@@ -34,10 +34,14 @@ export function showGameOverOverlay() {
     gameOverOverlay.style.cssText = `
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center;
-      z-index: 2000; font-family: 'Courier New', monospace;
+      z-index: 9999; font-family: 'Courier New', monospace; pointer-events: auto;
     `;
     document.getElementById('gameContainer').appendChild(gameOverOverlay);
   }
+
+  // Garantir que o canvas não bloqueie os cliques
+  const canvas = document.getElementById('gameCanvas');
+  if (canvas) canvas.style.pointerEvents = 'none';
   
   const timePlayed = formatTime(Math.floor(gameState.gameTime / 1000));
   const damageDealt = Math.round(player.totalDamageDealt || 0);
@@ -127,6 +131,9 @@ export function hideGameOverOverlay() {
   if (gameOverOverlay) {
     gameOverOverlay.style.display = 'none';
   }
+  // Restaurar pointer-events do canvas
+  const canvas = document.getElementById('gameCanvas');
+  if (canvas) canvas.style.pointerEvents = 'auto';
 }
 
 export function drawDamageNumbers() {

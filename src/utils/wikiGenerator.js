@@ -296,11 +296,25 @@ export function generateControlsHTML() {
   `;
 }
 
+// Adiciona explicação das dificuldades na wiki
+export function generateDifficultyHTML() {
+  return `
+    <h3>⚡ Dificuldades Disponíveis</h3>
+    <div class="tip-item"><strong>Fácil:</strong> Inimigos com pouca vida, dano e velocidade. EXP aumentada.</div>
+    <div class="tip-item"><strong>Normal:</strong> Desafio elevado, inimigos com vida, dano e velocidade bem maiores. EXP reduzida.</div>
+    <div class="tip-item"><strong>Difícil:</strong> Inimigos muito resistentes e rápidos, dano alto. EXP menor.</div>
+    <div class="tip-item"><strong>Muito Difícil:</strong> Inimigos extremamente fortes, rápidos e com pouco EXP.</div>
+    <div class="tip-item"><strong>Impossível:</strong> Experiência extrema, inimigos quase invencíveis, dano altíssimo, EXP mínima.</div>
+    <div style="margin-top:10px; font-size:0.95rem; color:#ffaa00;">A dificuldade afeta vida, dano, velocidade dos inimigos e a quantidade de EXP recebida!</div>
+  `;
+}
+
 // Função para gerar dicas baseadas nas mecânicas do jogo
 export function generateTipsHTML() {
   const wikiData = generateWikiContent();
   return `
     <h3>💡 Dicas Estratégicas Avançadas</h3>
+    ${generateDifficultyHTML()}
     
     <h4>🎮 Escolha de Personagem</h4>
     <div class="tip-item">

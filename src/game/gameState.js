@@ -26,12 +26,14 @@ export let damageNumbers = [];
 
 // Screen shake
 export let screenShakeIntensity = 0;
-
+export function setScreenShakeIntensity(val) {
+  screenShakeIntensity = val;
+}
 export function screenShake(intensity) {
-  screenShakeIntensity = intensity;
+  setScreenShakeIntensity(intensity);
   setTimeout(() => {
-    screenShakeIntensity = Math.max(0, screenShakeIntensity - 1);
-    if (screenShakeIntensity > 0) screenShake(screenShakeIntensity);
+    setScreenShakeIntensity(Math.max(0, intensity - 1));
+    if (intensity > 1) screenShake(intensity - 1);
   }, 50);
 }
 

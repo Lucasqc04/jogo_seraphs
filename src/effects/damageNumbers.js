@@ -1,4 +1,4 @@
-import { damageNumbers, screenShakeIntensity } from '../game/gameState.js';
+import { damageNumbers, setScreenShakeIntensity } from '../game/gameState.js';
 
 // Damage numbers
 export function createDamageNumber(x, y, damage, color) {
@@ -14,9 +14,9 @@ export function createDamageNumber(x, y, damage, color) {
 
 // Screen shake function
 export function screenShake(intensity) {
-  screenShakeIntensity = intensity;
-  setTimeout(() => {
-    screenShakeIntensity = Math.max(0, screenShakeIntensity - 1);
-    if (screenShakeIntensity > 0) screenShake(screenShakeIntensity);
-  }, 50);
+setScreenShakeIntensity(intensity);
+setTimeout(() => {
+  setScreenShakeIntensity(Math.max(0, intensity - 1));
+  if (intensity > 1) screenShake(intensity - 1);
+}, 50);
 }

@@ -117,7 +117,40 @@ document.getElementById('app').innerHTML = `
           </div>
         </div>
         
-        <button id="backToMenu" style="padding: 10px 20px; font-size: 1rem; background: linear-gradient(45deg, #666, #999); border: none; border-radius: 5px; color: #fff; cursor: pointer; font-weight: bold; margin-top: 20px;">VOLTAR</button>
+        <!-- Dificuldade -->
+        <div id="difficultySelect" style="margin: 30px 0; text-align: center;">
+          <h2 style="color: #ffaa00; margin-bottom: 10px;">Selecione a Dificuldade</h2>
+          <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <button class="difficulty-btn" data-diff="easy" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #00ff99, #00cc66); border: none; border-radius: 6px; color: #000; font-weight: bold; box-shadow: 0 0 10px #00ff99;">Fácil</button>
+            <button class="difficulty-btn" data-diff="normal" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #00aaff, #0055aa); border: none; border-radius: 6px; color: #fff; font-weight: bold; box-shadow: 0 0 10px #00aaff;">Normal</button>
+            <button class="difficulty-btn" data-diff="hard" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #ffaa00, #cc6600); border: none; border-radius: 6px; color: #fff; font-weight: bold; box-shadow: 0 0 10px #ffaa00;">Difícil</button>
+            <button class="difficulty-btn" data-diff="veryhard" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #ff4444, #aa0000); border: none; border-radius: 6px; color: #fff; font-weight: bold; box-shadow: 0 0 10px #ff4444;">Muito Difícil</button>
+            <button class="difficulty-btn" data-diff="impossible" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #000, #444); border: none; border-radius: 6px; color: #ffaa00; font-weight: bold; box-shadow: 0 0 10px #ffaa00;">IMPOSSÍVEL</button>
+            <button class="difficulty-btn" data-diff="custom" id="customDiffBtn" style="padding: 10px 25px; font-size: 1rem; background: linear-gradient(45deg, #ff00cc, #6600cc); border: none; border-radius: 6px; color: #fff; font-weight: bold; box-shadow: 0 0 10px #ff00cc; position:relative;">Personalizar</button>
+            <button id="editCustomDiffBtn" title="Editar valores personalizados" style="padding: 0 10px; font-size: 1.2rem; background: none; border: none; color: #ff00cc; cursor: pointer; position:relative; top:2px;">✏️</button>
+    <!-- Modal de dificuldade personalizada -->
+    <div id="customDiffModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center;">
+      <div style="background:#222; padding:30px; border-radius:15px; min-width:320px; max-width:90vw; box-shadow:0 0 30px #ff00cc; text-align:center;">
+        <h2 style="color:#ff00cc; margin-bottom:20px;">Personalizar Dificuldade</h2>
+        <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:20px;">
+          <label style="color:#fff;">HP dos inimigos: <input id="customHp" type="number" min="0.1" max="10" step="0.1" style="width:70px;" /></label>
+          <label style="color:#fff;">Dano dos inimigos: <input id="customDamage" type="number" min="0.1" max="10" step="0.1" style="width:70px;" /></label>
+          <label style="color:#fff;">Velocidade dos inimigos: <input id="customSpeed" type="number" min="0.1" max="10" step="0.1" style="width:70px;" /></label>
+          <label style="color:#fff;">EXP por inimigo: <input id="customExp" type="number" min="0.1" max="10" step="0.1" style="width:70px;" /></label>
+        </div>
+        <div style="display:flex; gap:15px; justify-content:center;">
+          <button id="saveCustomDiff" style="padding:10px 25px; background:linear-gradient(45deg,#ff00cc,#6600cc); color:#fff; border:none; border-radius:7px; font-weight:bold;">Salvar</button>
+          <button id="resetCustomDiff" style="padding:10px 25px; background:linear-gradient(45deg,#888,#ccc); color:#222; border:none; border-radius:7px; font-weight:bold;">Resetar</button>
+          <button id="closeCustomDiff" style="padding:10px 25px; background:linear-gradient(45deg,#333,#666); color:#fff; border:none; border-radius:7px; font-weight:bold;">Fechar</button>
+        </div>
+      </div>
+    </div>
+          </div>
+          <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
+            <button id="continueDifficulty" style="padding:12px 30px;font-size:1.2rem;background:linear-gradient(45deg,#ffaa00,#cc6600);border:none;border-radius:7px;color:#fff;font-weight:bold;box-shadow:0 0 10px #ffaa00;cursor:pointer;">Continuar</button>
+            <button id="backToMenu" style="padding:12px 30px;font-size:1.2rem;background:linear-gradient(45deg,#666,#999);border:none;border-radius:7px;color:#fff;font-weight:bold;box-shadow:0 0 10px #888;cursor:pointer;">Voltar</button>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -181,6 +214,69 @@ document.getElementById('app').innerHTML = `
 
 // Game initialization and core functions
 function initGame() {
+  // Modal customizado
+  const customDiffBtn = document.getElementById('customDiffBtn');
+  const editCustomDiffBtn = document.getElementById('editCustomDiffBtn');
+  const customDiffModal = document.getElementById('customDiffModal');
+  const customHp = document.getElementById('customHp');
+  const customDamage = document.getElementById('customDamage');
+  const customSpeed = document.getElementById('customSpeed');
+  const customExp = document.getElementById('customExp');
+  const saveCustomDiff = document.getElementById('saveCustomDiff');
+  const resetCustomDiff = document.getElementById('resetCustomDiff');
+  const closeCustomDiff = document.getElementById('closeCustomDiff');
+
+  // Valores padrão do Normal
+  const defaultCustomDiff = { hp: 2.7, damage: 2.7, speed: 2.2, exp: 1.5 };
+
+  // Carregar do localStorage ou padrão
+  function loadCustomDiff() {
+    const saved = localStorage.getItem('customDifficulty');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch { return { ...defaultCustomDiff }; }
+    }
+    return { ...defaultCustomDiff };
+  }
+  function saveCustomDiffToStorage(values) {
+    localStorage.setItem('customDifficulty', JSON.stringify(values));
+  }
+
+  // Abrir modal (apenas pelo botão lápis)
+  editCustomDiffBtn.onclick = () => {
+    const vals = loadCustomDiff();
+    customHp.value = vals.hp;
+    customDamage.value = vals.damage;
+    customSpeed.value = vals.speed;
+    customExp.value = vals.exp;
+    customDiffModal.style.display = 'flex';
+  };
+  // Fechar modal
+  closeCustomDiff.onclick = () => {
+    customDiffModal.style.display = 'none';
+  };
+  // Salvar
+  saveCustomDiff.onclick = () => {
+    const vals = {
+      hp: parseFloat(customHp.value) || defaultCustomDiff.hp,
+      damage: parseFloat(customDamage.value) || defaultCustomDiff.damage,
+      speed: parseFloat(customSpeed.value) || defaultCustomDiff.speed,
+      exp: parseFloat(customExp.value) || defaultCustomDiff.exp
+    };
+    saveCustomDiffToStorage(vals);
+    customDiffModal.style.display = 'none';
+    alert('Configuração personalizada salva!');
+  };
+  // Resetar
+  resetCustomDiff.onclick = () => {
+    customHp.value = defaultCustomDiff.hp;
+    customDamage.value = defaultCustomDiff.damage;
+    customSpeed.value = defaultCustomDiff.speed;
+    customExp.value = defaultCustomDiff.exp;
+    saveCustomDiffToStorage(defaultCustomDiff);
+    alert('Configuração resetada para o padrão Normal!');
+  };
   gameState.canvas = document.getElementById('gameCanvas');
   gameState.ctx = gameState.canvas.getContext('2d');
   
@@ -200,12 +296,66 @@ function initGame() {
     }
   };
   
-  // Character selection handlers
-  document.getElementById('selectSpeedster').onclick = async () => await startNewGameWithCharacter('speedster');
-  document.getElementById('selectHeavy').onclick = async () => await startNewGameWithCharacter('heavy');
-  document.getElementById('selectMystic').onclick = async () => await startNewGameWithCharacter('mystic');
-  document.getElementById('selectVeteran').onclick = async () => await startNewGameWithCharacter('veteran');
+  // Dificuldade
+  window.selectedDifficulty = null;
+  window.selectedCharacter = null;
+  let lastSelectedBtn = null;
+  let lastSelectedChar = null;
+  // Botão continuar agora está no HTML fixo
+  // Seleção de dificuldade
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.onclick = () => {
+      window.selectedDifficulty = btn.getAttribute('data-diff');
+      document.querySelectorAll('.difficulty-btn').forEach(b => b.style.outline = 'none');
+      btn.style.outline = '3px solid #ffaa00';
+      lastSelectedBtn = btn;
+      updateContinueBtnState();
+    };
+  });
+  // Seleção de personagem
+  document.getElementById('selectSpeedster').onclick = () => { selectCharacter('speedster'); updateContinueBtnState(); };
+  document.getElementById('selectHeavy').onclick = () => { selectCharacter('heavy'); updateContinueBtnState(); };
+  document.getElementById('selectMystic').onclick = () => { selectCharacter('mystic'); updateContinueBtnState(); };
+  document.getElementById('selectVeteran').onclick = () => { selectCharacter('veteran'); updateContinueBtnState(); };
+  function selectCharacter(type) {
+    window.selectedCharacter = type;
+    document.querySelectorAll('.character-card').forEach(card => card.style.outline = 'none');
+    document.getElementById('select' + capitalize(type)).style.outline = '3px solid #ffaa00';
+    lastSelectedChar = type;
+    updateContinueBtnState();
+  }
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
   document.getElementById('backToMenu').onclick = hideCharacterSelection;
+
+  // Função para atualizar o evento do botão Continuar
+  function updateContinueBtnState() {
+    const continueBtn = document.getElementById('continueDifficulty');
+    if (continueBtn) {
+      continueBtn.disabled = !(window.selectedCharacter && window.selectedDifficulty);
+      continueBtn.style.opacity = continueBtn.disabled ? '0.5' : '1';
+      continueBtn.onclick = () => {
+        console.log('Botão Continuar clicado:', window.selectedCharacter, window.selectedDifficulty);
+        if (window.selectedCharacter && window.selectedDifficulty) {
+          startNewGameWithCharacter(window.selectedCharacter);
+        } else {
+          alert('Selecione um personagem e uma dificuldade antes de continuar!');
+        }
+      };
+    }
+  }
+
+  // Seleção de dificuldade
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.onclick = () => {
+      window.selectedDifficulty = btn.getAttribute('data-diff');
+      document.querySelectorAll('.difficulty-btn').forEach(b => b.style.outline = 'none');
+      btn.style.outline = '3px solid #ffaa00';
+      lastSelectedBtn = btn;
+      updateContinueBtnState();
+    };
+  });
   
   // Character card hover effects
   document.querySelectorAll('.character-card').forEach(card => {
@@ -329,21 +479,42 @@ function startNewGame() {
 }
 
 function startGame() {
+  // Definir modificadores de dificuldade
+  const diff = window.selectedDifficulty || 'veryhard';
+  let diffMod;
+  if (diff === 'custom') {
+    // Carregar do localStorage
+    const custom = localStorage.getItem('customDifficulty');
+    try {
+      diffMod = custom ? JSON.parse(custom) : { hp: 1.7, damage: 1.7, speed: 1.2, exp: 1.5 };
+    } catch {
+      diffMod = { hp: 1.7, damage: 1.7, speed: 1.2, exp: 1.5 };
+    }
+  } else {
+    diffMod = {
+      easy:       { hp: 0.7, damage: 0.7, speed: 0.9, exp: 2.0 },
+      normal:     { hp: 1.7, damage: 1.7, speed: 1.2, exp: 1.5 },  
+      hard:       { hp: 2.0, damage: 2.0, speed: 1.3, exp: 1.0 },
+      veryhard:   { hp: 2.5, damage: 2.5, speed: 1.8, exp: 0.6 },
+      impossible: { hp: 3.5, damage: 3.5, speed: 2.6, exp: 0.5 }
+    }[diff];
+  }
+  gameState.enemyDifficultyMod = diffMod;
   gameState.screen = 'playing';
   gameState.gameRunning = true;
-  
+
   document.getElementById('startScreen').style.display = 'none';
   document.getElementById('characterScreen').style.display = 'none';
   document.getElementById('gameCanvas').style.display = 'block';
   document.getElementById('gameUI').style.display = 'block';
-  
+
   // Se há upgrades iniciais pendentes, mostrar o primeiro menu
   if (gameState.pendingStartingUpgrades && gameState.pendingStartingUpgrades.length > 0) {
     setTimeout(() => {
       showStartingUpgradeMenu();
     }, 500); // Pequeno delay para a transição
   }
-  
+
   gameLoop();
 }
 
@@ -465,6 +636,12 @@ async function showStartingUpgradeMenu() {
 
 // Game loop
 function gameLoop() {
+  // Se estiver em game over, não atualiza nada do jogo
+  const gameOverOverlay = document.getElementById('gameOverOverlay');
+  if (gameOverOverlay && gameOverOverlay.style.display === 'flex') {
+    // Só atualiza a animação do overlay, não o jogo
+    return;
+  }
   if (!gameState.gameRunning) {
     requestAnimationFrame(gameLoop);
     return;
@@ -522,6 +699,16 @@ function gameLoop() {
   // Update and draw enemies
   for (let i = enemies.length - 1; i >= 0; i--) {
     const enemy = enemies[i];
+    
+    // Aplicar modificadores de dificuldade
+    if (gameState.enemyDifficultyMod && !enemy._difficultyApplied) {
+      enemy.hp = Math.round((enemy.hp || 10) * gameState.enemyDifficultyMod.hp);
+      enemy.maxHp = Math.round((enemy.maxHp || enemy.hp) * gameState.enemyDifficultyMod.hp);
+      enemy.damage = Math.round((enemy.damage || 5) * gameState.enemyDifficultyMod.damage);
+      enemy.speed = (enemy.speed || 1) * gameState.enemyDifficultyMod.speed;
+      enemy.expReward = Math.round((enemy.expReward || 10) * gameState.enemyDifficultyMod.exp);
+      enemy._difficultyApplied = true;
+    }
     enemy.update();
     enemy.draw();
     
@@ -774,18 +961,11 @@ for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
   
   // Check game over
   if (player.hp <= 0) {
-    saveGame();
-    drawGameOverScreen();
-    
-    if (gameState.keys['Escape']) {
-      const gameOverOverlay = document.getElementById('gameOverOverlay');
-      if (gameOverOverlay && gameOverOverlay.style.display === 'flex') {
-        hideGameOverOverlay();
-        quitToMenu();
-      }
+    if (!document.getElementById('gameOverOverlay') || document.getElementById('gameOverOverlay').style.display !== 'flex') {
+      saveGame();
+      drawGameOverScreen();
     }
-    
-    requestAnimationFrame(gameLoop);
+    // Não atualiza o jogo enquanto o overlay está ativo
     return;
   }
   
