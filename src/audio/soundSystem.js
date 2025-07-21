@@ -2,14 +2,16 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 export function playSound(type) {
+  // Checa mute global (window.isGameMuted)
+  if (typeof window !== 'undefined' && window.isGameMuted) return;
   if (!audioContext) return;
-  
+
   const oscillator = audioContext.createOscillator();
   const gainNode = audioContext.createGain();
-  
+
   oscillator.connect(gainNode);
   gainNode.connect(audioContext.destination);
-  
+
   const sounds = {
     shoot: { freq: 800, duration: 0.1, type: 'square' },
     hit: { freq: 200, duration: 0.2, type: 'sawtooth' },
@@ -22,15 +24,15 @@ export function playSound(type) {
     revive: { freq: 800, duration: 0.8, type: 'sine' },
     upgrade: { freq: 1200, duration: 0.3, type: 'sine' }
   };
-  
+
   const sound = sounds[type] || sounds.shoot;
-  
+
   oscillator.frequency.setValueAtTime(sound.freq, audioContext.currentTime);
   oscillator.type = sound.type;
-  
+
   gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
   gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
-  
+
   oscillator.start(audioContext.currentTime);
   oscillator.stop(audioContext.currentTime + sound.duration);
 }

@@ -46,12 +46,15 @@ document.getElementById('app').innerHTML = `
           <div id="statsContent" style="color: #ffffff; line-height: 1.6;"></div>
         </div>
         
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; align-items: center;">
           <button id="startNewGame" style="padding: 15px 30px; font-size: 1.2rem; background: linear-gradient(45deg, #00ff00, #00aa00); border: none; border-radius: 5px; color: #000; cursor: pointer; font-weight: bold; box-shadow: 0 0 15px rgba(0,255,0,0.5); transition: all 0.3s;">START NEW GAME</button>
           <button id="resumeGame" style="padding: 15px 30px; font-size: 1.2rem; background: linear-gradient(45deg, #ffff00, #aaaa00); border: none; border-radius: 5px; color: #000; cursor: pointer; font-weight: bold; box-shadow: 0 0 15px rgba(255,255,0,0.5); transition: all 0.3s; display: none;">RESUME GAME</button>
           <button id="openWiki" style="padding: 15px 30px; font-size: 1.2rem; background: linear-gradient(45deg, #00ffff, #0088aa); border: none; border-radius: 5px; color: #000; cursor: pointer; font-weight: bold; box-shadow: 0 0 15px rgba(0,255,255,0.5); transition: all 0.3s;">📖 WIKI</button>
           <button id="clearHistory" style="padding: 15px 30px; font-size: 1.2rem; background: linear-gradient(45deg, #ff0000, #aa0000); border: none; border-radius: 5px; color: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 0 15px rgba(255,0,0,0.5); transition: all 0.3s;">CLEAR HISTORY</button>
         </div>
+
+        <!-- Botão de mute no canto superior direito -->
+        <button id="muteBtn" style="position: absolute; top: 25px; right: 30px; padding: 12px 18px; font-size: 1.3rem; background: linear-gradient(45deg, #333, #666); border: none; border-radius: 50%; color: #fff; cursor: pointer; font-weight: bold; box-shadow: 0 0 10px #00ffff; transition: all 0.3s; z-index: 2000;" title="Ativar/Desativar Som">🔊</button>
         
         <div style="margin-top: 30px; color: #888; font-size: 0.9rem;">
           <p>Controls: A/D - Move | Space - Jump | Mouse - Aim & Shoot | ESC - Pause</p>
@@ -987,4 +990,33 @@ window.restartWithSameCharacter = restartWithSameCharacter;
 window.quitToMenu = quitToMenu;
 
 // Initialize when page loads
+// Mute system
+function setMuteState(muted) {
+  localStorage.setItem('gameMuted', muted ? '1' : '0');
+  window.isGameMuted = !!muted;
+  const btn = document.getElementById('muteBtn');
+  if (btn) btn.innerText = muted ? '🔇' : '🔊';
+}
+
+function toggleMute() {
+  setMuteState(!window.isGameMuted);
+}
+
+function loadMuteState() {
+  const muted = localStorage.getItem('gameMuted') === '1';
+  setMuteState(muted);
+}
+
+// Inicialização do jogo
+function afterInitMuteBtn() {
+  const muteBtn = document.getElementById('muteBtn');
+  if (muteBtn) {
+    muteBtn.onclick = toggleMute;
+    loadMuteState();
+  }
+}
+
+// Chama após o DOM estar pronto
+setTimeout(afterInitMuteBtn, 0);
+
 initGame();
